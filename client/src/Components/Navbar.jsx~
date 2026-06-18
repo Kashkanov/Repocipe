@@ -1,0 +1,58 @@
+import {NavLink} from "react-router";
+import {useAuth} from "../Contexts/AuthContext.jsx";
+
+const Navbar = () => {
+    const {user, logout} = useAuth();
+
+    const links = [
+        {
+            name: "Home",
+            link: "/"
+        },
+        {
+            name: "Explore",
+            link: "/Recipes?page=1"
+        },
+        {
+            name: "Create",
+            link: "/Recipes/add"
+        }
+    ];
+
+    return (
+        <nav className="fixed flex justify-start items-center h-15 w-screen bg-[#344E41] py-auto z-30 px-5">
+            <div className="flex w-1/2 justify-start">
+                {user && (
+                    <ul className="flex gap-5">
+                        {
+                            links.map((item) => {
+                                return (
+                                    <li key={item.name}>
+                                        <NavLink
+                                            to={item.link}
+                                            className="font-bold"
+                                        >
+                                            {item.name}
+                                        </NavLink>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                )}
+            </div>
+            <div className="flex justify-end w-1/2">
+                {user &&
+                    <button
+                        onClick={logout}
+                        className="font-bold"
+                    >
+                        Logout
+                    </button>
+                }
+            </div>
+        </nav>
+    )
+}
+
+export default Navbar;
