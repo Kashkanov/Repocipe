@@ -76,3 +76,5 @@ build/
 # --- NestJS (server) specific ---
 server/dist/
 server/tsconfig.build.tsbuildinfo
+/client/package-lock.json
+/server/package-lock.json
