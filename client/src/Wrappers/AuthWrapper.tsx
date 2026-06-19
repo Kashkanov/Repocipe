@@ -13,10 +13,10 @@ const AuthWrapper: FC<AppProps> = ({children}) => {
     if (loading) {
         return <LoadingPage/>
     }
-    if (!user) {
-        return <Navigate to="/login"/>
-    }
-    console.log("authenticated user is: ", user.username);         //<===
+    // if (!user) {
+    //     return <Navigate to="/login"/>
+    // }
+    // console.log("authenticated user is: ", user.username);         //<===
     return children;
 
 }

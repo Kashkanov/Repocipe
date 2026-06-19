@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
@@ -20,11 +20,17 @@ export class RecipesService {
     private recipesRepository: Repository<Recipe>,
   ) {}
 
-  async findAll(page: number = 1, limit: number = 10): Promise<Recipe[]> {
-    return this.recipesRepository.find({
+  async findAll(
+    page: number = 1,
+    limit: number = 8,
+    search?: string,
+  ): Promise<{ recipes: Recipe[]; total: number }> {
+    const [recipes, total] = await this.recipesRepository.findAndCount({
+      where: search ? { name: ILike(`%${search}%`) } : {},
       skip: (page - 1) * limit,
       take: limit,
     });
+    return { recipes, total };
   }
 
   async findOne(id: number): Promise<Recipe> {
@@ -99,6 +105,10 @@ export class RecipesService {
   async remove(id: number): Promise<Recipe> {
     const recipe = await this.recipesRepository.findOne({
       where: { id },
+      relations: {
+        ingredients: true,
+        steps: true,
+      },
     });
     if (!recipe) {
       throw new NotFoundException('Recipe not found');

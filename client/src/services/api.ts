@@ -1,6 +1,8 @@
+import type {Ingredient, Recipe, RecipeMatch, RecipeResponse} from "../types";
+
 const api_url = import.meta.env.VITE_API_URL;
 
-export function getAllRecipesAndCount(page, search) {
+export async function getAllRecipesAndCount(page: number, search: string): Promise<RecipeResponse> {
     console.log(`page ${page} + search: ${search}`);        //<===
     return fetch(api_url + "recipes?page=" + page + "&search=" + search,
         {
@@ -10,7 +12,7 @@ export function getAllRecipesAndCount(page, search) {
         .then((res) => res.json());
 }
 
-export async function getThreeLatestRecipes() {
+export async function getThreeLatestRecipes(): Promise<Recipe[]> {
     return fetch(api_url + "recipes/threeLatest/",
         {
             method: "GET",
@@ -19,7 +21,7 @@ export async function getThreeLatestRecipes() {
         .then((res) => res.json());
 }
 
-export function getLatestRecipe() {
+export async function getLatestRecipe(): Promise<Recipe> {
     return fetch(api_url + "recipes/latest/",
         {
             method: "GET",
@@ -28,7 +30,7 @@ export function getLatestRecipe() {
         .then((res) => res.json());
 }
 
-export function getRecipeById(id) {
+export async function getRecipeById(id: number): Promise<Recipe> {
     return fetch(api_url + "recipes/" + id,
         {
             method: "GET",
@@ -37,7 +39,8 @@ export function getRecipeById(id) {
         .then((res) => res.json());
 }
 
-export function createRecipe(recipe) {
+export async function createRecipe(recipe: Recipe): Promise<Recipe> {
+    console.log(recipe)
     return fetch(api_url + "recipes",
         {
             method: "POST",
@@ -50,8 +53,8 @@ export function createRecipe(recipe) {
         .then((res) => res.json());
 }
 
-export function uploadImage(image) {
-    return fetch(api_url + "recipes/uploadImage",
+export async function uploadImage(image: FormData) {
+    return fetch(api_url + "recipes/upload",
         {
             method: "POST",
             credentials: "include",
@@ -60,7 +63,7 @@ export function uploadImage(image) {
         .then((res) => res.json());
 }
 
-export function matchRecipe(ingredients) {
+export async function matchRecipe(ingredients: Ingredient[]): Promise<RecipeMatch[]> {
     return fetch(api_url + "recipes/matchRecipe",
         {
             method: "POST",

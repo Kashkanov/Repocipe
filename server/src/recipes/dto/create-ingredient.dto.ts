@@ -7,6 +7,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateIngredientDto {
   @IsString()
@@ -14,21 +15,20 @@ export class CreateIngredientDto {
   @MaxLength(50)
   name: string;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   @Max(100)
-  @IsOptional()
-  qty: number;
+  qty?: number;
 
+  @IsOptional()
   @IsString()
-  @MinLength(1)
   @MaxLength(50)
-  @IsOptional()
-  unit: string;
+  unit?: string;
 
-  @IsString()
-  @MinLength(3)
-  @MaxLength(255)
   @IsOptional()
-  description: string;
+  @IsString()
+  @MaxLength(255)
+  description?: string;
 }

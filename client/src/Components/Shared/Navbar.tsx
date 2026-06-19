@@ -2,7 +2,7 @@ import {NavLink, useLocation} from "react-router";
 import {useAuth} from "../../Contexts/AuthContext";
 
 const Navbar = () => {
-    const {user, logout} = useAuth();
+    // const {user, logout} = useAuth();
 
     const isActive = (path: string) => {
         if (path === '/') {
@@ -38,7 +38,7 @@ const Navbar = () => {
 
     return (
         <>
-            {user && (
+            {/*{user && (*/}
                 <nav className="fixed flex justify-start items-center h-15 w-screen bg-[#344E41] py-auto z-30 px-5">
                     <div className="flex w-1/2 justify-start h-15">
                         <ul className="flex gap-5 h-15">
@@ -64,17 +64,17 @@ const Navbar = () => {
 
                     </div>
                     <div className="flex justify-end w-1/2">
-                        {user &&
-                            <button
-                                onClick={logout}
-                                className="font-bold"
-                            >
-                                Logout
-                            </button>
-                        }
+                        {/*{user &&*/}
+                        {/*    <button*/}
+                        {/*        onClick={logout}*/}
+                        {/*        className="font-bold"*/}
+                        {/*    >*/}
+                        {/*        Logout*/}
+                        {/*    </button>*/}
+                        {/*}*/}
                     </div>
                 </nav>
-            )}
+            {/*)}*/}
         </>
     )
 }

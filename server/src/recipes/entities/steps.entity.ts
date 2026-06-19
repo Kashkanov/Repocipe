@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Recipe } from './recipe.entity';
 
 @Entity()
@@ -13,5 +14,5 @@ export class Step {
   description: string;
 
   @ManyToOne(() => Recipe, (recipe) => recipe.steps)
-  recipe: Recipe;
+  recipe: Relation<Recipe>;
 }

@@ -1,14 +1,14 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowsRotate} from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
-import type {recipeMatch} from "../../types/recipeMatch";
+import type { RecipeMatch } from "../../types";
 import type {FC} from "react";
 import {motion} from "framer-motion";
 
 type AppProps = {
-    matchedRecipes: recipeMatch[];
-    topMatchedRecipe: recipeMatch | null;
-    setMatchedRecipes: React.Dispatch<React.SetStateAction<recipeMatch[]>>;
-    setTopMatchedRecipe: React.Dispatch<React.SetStateAction<recipeMatch | null>>;
+    matchedRecipes: RecipeMatch[];
+    topMatchedRecipe: RecipeMatch | null;
+    setMatchedRecipes: React.Dispatch<React.SetStateAction<RecipeMatch[]>>;
+    setTopMatchedRecipe: React.Dispatch<React.SetStateAction<RecipeMatch | null>>;
     setIngredients: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
@@ -78,7 +78,7 @@ const MatchResults: FC<AppProps> = ({
                                 className="w-full h-full"
                             >
                                 <div className="relative flex flex-col w-full h-full justify-between items-center">
-                                    <img className="w-full h-full object-cover" src={topMatchedRecipe?.recipe.picture}
+                                    <img className="w-full h-full object-cover" src={topMatchedRecipe?.recipe.image}
                                          alt="recipe"/>
                                     <motion.div
                                         className="absolute bottom-5 w-[100px] h-[100px] bg-[#FEF9C3] z-10 rotate-45"
@@ -97,7 +97,7 @@ const MatchResults: FC<AppProps> = ({
                                             }
                                         }}
                                     >
-                                        {topMatchedRecipe?.recipe.title} - <strong>{topMatchedRecipe && (topMatchedRecipe["score"] * 100).toFixed(2)}%</strong>
+                                        {topMatchedRecipe?.recipe.name} - <strong>{topMatchedRecipe && (topMatchedRecipe["score"] * 100).toFixed(2)}%</strong>
                                     </motion.div>
                                 </div>
                             </a>
@@ -123,7 +123,7 @@ const MatchResults: FC<AppProps> = ({
                                         className="flex justify-between items-center  w-full h-full"
                                     >
                                         <span className="text-mogra">{count}</span>
-                                        <span className="">{recipe.recipe.title}</span>
+                                        <span className="">{recipe.recipe.name}</span>
                                         <span className="">{recipe["score"] * 100}% <strong><i>Match</i></strong></span>
                                     </a>
                                 </motion.div>

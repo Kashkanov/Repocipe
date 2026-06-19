@@ -1,14 +1,14 @@
 import {useEffect, useState} from "react";
 import {motion} from "motion/react";
 import {Link} from "react-router-dom";
-import {getThreeLatestRecipes, getLatestRecipe} from "../../services/recipeService.js";
-import type {recipe} from "../../types/recipe";
+import {getThreeLatestRecipes, getLatestRecipe} from "../../services/api.js";
+import type {Recipe} from "../../types";
 
 const Showcase = () => {
 
 
-    const [sampRecipes, setSampRecipes] = useState<recipe[]>([]);
-    const [newestRecipe, setNewestRecipe] = useState<recipe>();
+    const [sampRecipes, setSampRecipes] = useState<Recipe[]>([]);
+    const [newestRecipe, setNewestRecipe] = useState<Recipe>();
 
     async function ThreeLatestRecipes() {
         const response = await getThreeLatestRecipes();
@@ -53,8 +53,8 @@ const Showcase = () => {
                                     whileHover="hover"
                                 >
                                     <img
-                                        src={newestRecipe?.picture}
-                                        alt={newestRecipe?.title}
+                                        src={newestRecipe?.image}
+                                        alt={newestRecipe?.name}
                                         className="w-full h-full object-cover"
                                     />
                                     {/*Overlay pull-down on hover*/}
@@ -69,19 +69,19 @@ const Showcase = () => {
                                         }}
                                     >
                                         <div className="flex-col justify-center w-full h-44">
-                                            <h1 className="text-5xl font-bold">{newestRecipe?.title}</h1>
+                                            <h1 className="text-5xl font-bold">{newestRecipe?.name}</h1>
                                             <p className="pt-5 mx-5">{newestRecipe?.description}</p>
                                             <div className="flex justify-center items-center w-full mt-5">
                                                 <div className="flex-col w-1/2 justify-center">
                                                     <p className="text-5xl">🔪</p>
                                                     <h2 className="text-3xl">
-                                                        <strong>{newestRecipe?.prep_time}</strong> mins</h2>
+                                                        <strong>{newestRecipe?.preptime}</strong> mins</h2>
                                                     <p>Prep Time</p>
                                                 </div>
                                                 <div className="flex-col w-1/2 justify-center">
                                                     <p className="text-5xl">🍳</p>
                                                     <h2 className="text-3xl">
-                                                        <strong>{newestRecipe?.cook_time}</strong> mins</h2>
+                                                        <strong>{newestRecipe?.cooktime}</strong> mins</h2>
                                                     <p>Cook Time</p>
                                                 </div>
                                             </div>
@@ -120,8 +120,8 @@ const Showcase = () => {
                                                         whileHover="hover"
                                                     >
                                                         <img
-                                                            src={recipe.picture}
-                                                            alt={recipe.title}
+                                                            src={recipe.image}
+                                                            alt={recipe.name}
                                                             className="w-full h-full object-cover"
                                                         />
                                                         <motion.div
@@ -139,20 +139,20 @@ const Showcase = () => {
                                                             }}
                                                         >
                                                             <div className="flex-col justify-center w-full h-44">
-                                                                <h2 className="text-2xl font-bold">{recipe.title}</h2>
+                                                                <h2 className="text-2xl font-bold">{recipe.name}</h2>
                                                                 <div
                                                                     className="flex justify-center items-center w-full mt-5">
                                                                     <div className="flex-col w-1/2 justify-center">
                                                                         <p className="text-xl">🔪</p>
                                                                         <h2 className="text-lg">
-                                                                            <strong>{recipe.prep_time}</strong> mins
+                                                                            <strong>{recipe.preptime}</strong> mins
                                                                         </h2>
                                                                         <p>Prep Time</p>
                                                                     </div>
                                                                     <div className="flex-col w-1/2 justify-center">
                                                                         <p className="text-xl">🍳</p>
                                                                         <h2 className="text-lg">
-                                                                            <strong>{recipe.cook_time}</strong> mins
+                                                                            <strong>{recipe.cooktime}</strong> mins
                                                                         </h2>
                                                                         <p>Cook Time</p>
                                                                     </div>

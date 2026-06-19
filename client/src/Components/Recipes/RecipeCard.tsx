@@ -1,24 +1,24 @@
 import {motion} from "framer-motion";
 import {Link} from "react-router-dom";
 import type {FC} from "react";
-import type {recipe} from "../../types/recipe";
+import type {Recipe} from "../../types";
 
 type AppProps = {
-    recipe: recipe;
+    recipe: Recipe;
 }
 
 const RecipeCard: FC<AppProps> = ({recipe}) => {
 
     return (
         <motion.div
-            key={recipe._id}
+            key={recipe.id}
             // initial="rest"
             // animate="rest"
             whileHover="hover"
             className="relative w-full h-[240px]"
         >
             <Link
-                to={`/recipes/${recipe._id}`}
+                to={`/recipes/${recipe.id}`}
                 className="absolute w-full h-full top-0 left-0 z-50"
             >
             </Link>
@@ -43,30 +43,32 @@ const RecipeCard: FC<AppProps> = ({recipe}) => {
                 }}
                 // whileHover="hover"
                 variants={{
-                    hover : {
+                    hover: {
                         scale: 1.2,
                         backgroundColor: "#ffffff"
                     }
                 }}
             >
-                <img
-                    src={recipe.picture}
-                    alt={recipe.title}
-                    className="h-3/4 max-h-3/4 w-full object-cover"
-                />
+                {recipe.image &&
+                    <img
+                        src={recipe.image}
+                        alt={recipe.name}
+                        className="h-3/4 max-h-3/4 w-full object-cover"
+                    />
+                }
                 <motion.div
                     className="flex h-1/4 w-full justify-center items-center"
                     initial={{
                         color: "#ffffff"
                     }}
                     variants={{
-                        hover : {
+                        hover: {
                             color: "#000000",
                             fontWeight: 700
                         }
                     }}
                 >
-                    {recipe.title}
+                    {recipe.name}
                 </motion.div>
                 {/* Back part with details */}
                 {/*<motion.div*/}

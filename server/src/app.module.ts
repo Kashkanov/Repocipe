@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { RecipesModule } from './recipes/recipes.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,7 +15,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: 'db.sqlite',
       entities: [__dirname + '/**/*.entity{.js,.ts}'],
       synchronize: true,
+      logging: ['error', 'warn', 'schema'],
     }),
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Ingredient } from './ingredients.entity';
 import { Step } from './steps.entity';
 
@@ -16,30 +17,30 @@ export class Recipe {
   @Column()
   name: string;
 
-  @Column()
-  cooktime: number;
+  @Column({ nullable: true })
+  cooktime?: number;
 
-  @Column()
-  preptime: number;
+  @Column({ nullable: true })
+  preptime?: number;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @OneToMany(() => Ingredient, (ingredient) => ingredient.recipe, {
     cascade: true,
     orphanedRowAction: 'delete',
   })
-  ingredients: Ingredient[];
+  ingredients: Relation<Ingredient[]>;
 
   @OneToMany(() => Step, (step) => step.recipe, {
     cascade: true,
     orphanedRowAction: 'delete',
   })
-  steps: Step[];
+  steps: Relation<Step[]>;
 
-  @Column()
-  image: string;
+  @Column({ nullable: true })
+  image?: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ nullable: true })
   createdAt: Date;
 }

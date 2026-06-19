@@ -7,6 +7,6 @@ export class CreateStepDto {
 
   @IsString()
   @MinLength(3)
-  @MaxLength(255)
+  @MaxLength(1000)
   description: string;
 }

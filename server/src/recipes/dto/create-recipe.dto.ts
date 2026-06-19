@@ -3,7 +3,7 @@ import { CreateStepDto } from './create-step.dto';
 import {
   ArrayMinSize,
   IsArray,
-  IsNumber,
+  IsNumber, IsOptional,
   IsString,
   Max,
   MaxLength,
@@ -24,15 +24,19 @@ export class CreateRecipeDto {
   @MaxLength(255)
   description: string;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   @Max(100)
-  cooktime: number;
+  cooktime?: number;
 
+  @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   @Max(100)
-  preptime: number;
+  preptime?: number;
 
   @IsArray()
   @ArrayMinSize(1)
@@ -46,6 +50,7 @@ export class CreateRecipeDto {
   @Type(() => CreateStepDto)
   steps: CreateStepDto[];
 
+  @IsOptional()
   @IsString()
   image: string;
 }

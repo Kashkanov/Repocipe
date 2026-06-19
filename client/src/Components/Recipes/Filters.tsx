@@ -19,7 +19,7 @@ const Filters = () => {
                 <div className="flex flex-col justify-start items-start w-full my-2">
                     <div className="text-xl w-full rounded-lg bg-gray-200 flex p-1 mb-2 text-gray-700">Cuisine Type</div>
                     {cuisines.map((cuisine, index) => (
-                        <label htmlFor="cuisine" className="px-2">
+                        <label key={index} htmlFor="cuisine" className="px-2">
                             <input type="radio" id="cuisine" name="cuisine"/>
                             &nbsp; {cuisine}
                         </label>
@@ -29,7 +29,7 @@ const Filters = () => {
                 <div className="flex flex-col justify-start items-start w-full my-2">
                     <div className="text-xl w-full rounded-lg bg-gray-200 flex p-1 mb-2 text-gray-700">Sort</div>
                     {sortFilters.map((sFil, index) => (
-                        <label htmlFor="sort" className="px-2">
+                        <label key={index} htmlFor="sort" className="px-2">
                             <input type="radio" id="sort" name="sort"/>
                             &nbsp; {sFil}
                         </label>

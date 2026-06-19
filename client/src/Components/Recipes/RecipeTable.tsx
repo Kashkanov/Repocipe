@@ -1,10 +1,10 @@
 import RecipeCard from "./RecipeCard.js";
 import {type FC} from "react";
-import type {recipe} from "../../types/recipe";
+import type {Recipe} from "../../types";
 import {motion} from "motion/react";
 
 type AppProps = {
-    recipes: recipe[];
+    recipes: Recipe[];
 }
 
 const RecipeTable: FC<AppProps> = ({recipes}) => {
@@ -20,7 +20,7 @@ const RecipeTable: FC<AppProps> = ({recipes}) => {
             >
                 {recipes.map((recipe) => {
                     return (
-                        <RecipeCard key={recipe._id} recipe={recipe}/>
+                        <RecipeCard key={recipe.id} recipe={recipe}/>
                     )
                 })
                 }

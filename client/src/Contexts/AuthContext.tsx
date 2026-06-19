@@ -1,9 +1,9 @@
 import {createContext, type FC, useContext, useEffect, useMemo, useState} from "react";
-import type {user} from "../types/user"
+import type {User} from "../types"
 
 type AuthContextType = {
-    user: user | null;
-    setUser: React.Dispatch<React.SetStateAction<user | null>>;
+    user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
     checkAuth: () => Promise<void>;
     returnUrl: string;
     setReturnUrl: React.Dispatch<React.SetStateAction<string>>;
@@ -19,7 +19,7 @@ type AuthProviderProps = {
 }
 
 export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
-    const [user, setUser] = useState<user | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [returnUrl, setReturnUrl] = useState<string>("/");
     const backend_url = import.meta.env.VITE_API_URL;

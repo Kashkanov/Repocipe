@@ -4,12 +4,12 @@ import {motion} from "framer-motion";
 import Overview from "../../Components/RecipePage/Overview.js";
 import Ingredients from "../../Components/RecipePage/Ingredients.js";
 import Steps from "../../Components/RecipePage/Steps.js";
-import {getRecipeById} from "../../services/recipeService.js";
-import type {recipe} from "../../types/recipe";
+import {getRecipeById} from "../../services/api.js";
+import type {Recipe} from "../../types";
 
 const RecipePage = () => {
 
-    const [recipe, setRecipe] = useState<recipe>();
+    const [recipe, setRecipe] = useState<Recipe>();
     const params = useParams();
     const [showFullPic, setShowFullPic] = useState<boolean>(false);
 
@@ -34,9 +34,9 @@ const RecipePage = () => {
                         <div className="flex justify-center w-full gap-3 max-h-110">
                             {/*Overview section*/}
                             <Overview
-                                title={recipe.title}
-                                prep_time={recipe.prep_time}
-                                cook_time={recipe.cook_time}
+                                title={recipe.name}
+                                prep_time={recipe.preptime}
+                                cook_time={recipe.cooktime}
                                 description={recipe.description}
                                 uploader={recipe.uploader}
                             />
@@ -52,8 +52,8 @@ const RecipePage = () => {
                                     onClick={() => setShowFullPic(true)}
                                 >
                                     <img
-                                        src={recipe.picture}
-                                        alt={recipe.title}
+                                        src={recipe.image}
+                                        alt={recipe.name}
                                         className="w-full max-w-full h-full max-h-full object-cover"
                                     />
                                 </button>
@@ -66,8 +66,8 @@ const RecipePage = () => {
                                         <div
                                             className="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-100 z-50">
                                             <img
-                                                src={recipe.picture}
-                                                alt={recipe.title}
+                                                src={recipe.image}
+                                                alt={recipe.name}
                                                 className="max-w-full max-h-full object-cover"
                                             />
                                         </div>

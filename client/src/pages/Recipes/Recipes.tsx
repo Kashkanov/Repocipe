@@ -2,8 +2,8 @@ import RecipeTable from "../../Components/Recipes/RecipeTable.js";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
 import Pagination from "../../Components/Recipes/Pagination.js";
-import {getAllRecipesAndCount} from "../../services/recipeService.js";
-import type {recipe} from "../../types/recipe";
+import {getAllRecipesAndCount} from "../../services/api.js";
+import type {Recipe} from "../../types";
 import Filters from "../../Components/Recipes/Filters";
 import Search from "../../Components/Recipes/Search";
 import {motion} from "framer-motion";
@@ -11,7 +11,7 @@ import {motion} from "framer-motion";
 const Recipes = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const [recipes, setRecipes] = useState<recipe[]>();
+    const [recipes, setRecipes] = useState<Recipe[]>();
     const [total, setTotal] = useState<number>(0);
     const page = parseInt(searchParams.get("page") ?? "1");
     const search = searchParams.get("search") ?? ""

@@ -1,16 +1,16 @@
 import {useState} from "react";
 import AddIngredients from "../../Components/Matchipe/AddIngredients.js";
-import {matchRecipe} from "../../services/recipeService.js";
+import {matchRecipe} from "../../services/api.js";
 import MatchResults from "../../Components/Matchipe/MatchResults.js";
 import Loading from "../../Components/Shared/Loading.js";
 import {validateIngredients} from "../../validation/addRecipeValidation.js";
-import type {recipeMatch} from "../../types/recipeMatch";
+import type {RecipeMatch} from "../../types";
 
 const MatchPage = () => {
     const [ingredients, setIngredients] = useState<string[]>([]);
-    const [matchedRecipes, setMatchedRecipes] = useState<recipeMatch[]>([]);
+    const [matchedRecipes, setMatchedRecipes] = useState<RecipeMatch[]>([]);
     const [isValidIngredients, setValidIngredients] = useState<boolean>(true);
-    const [topMatchedRecipe, setTopMatchedRecipe] = useState<recipeMatch | null>(null);
+    const [topMatchedRecipe, setTopMatchedRecipe] = useState<RecipeMatch | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmitIngredients = async (e: React.FormEvent<HTMLFormElement>) => {

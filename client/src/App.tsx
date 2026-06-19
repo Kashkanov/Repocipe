@@ -15,21 +15,27 @@ import ReverseAuthWrapper from "./Wrappers/ReverseAuthWrapper.js";
 function App() {
 
     return (
-        <AuthProvider>
+        // <AuthProvider>
             <BrowserRouter>
                 <NavBar/>
                 <Routes>
-                    <Route path="/" element={<AuthWrapper><Homepage/></AuthWrapper>}/>
-                    <Route path="/Recipes" element={<AuthWrapper><Recipes/></AuthWrapper>}/>
-                    <Route path="/Recipes/:id" element={<AuthWrapper><RecipePage/></AuthWrapper>}/>
-                    <Route path="/Create" element={<AuthWrapper><AddRecipe/></AuthWrapper>}/>
-                    <Route path="/Matchipe" element={<AuthWrapper><MatchPage/></AuthWrapper>}/>
+                    {/*<Route path="/" element={<AuthWrapper><Homepage/></AuthWrapper>}/>*/}
+                    {/*<Route path="/Recipes" element={<AuthWrapper><Recipes/></AuthWrapper>}/>*/}
+                    {/*<Route path="/Recipes/:id" element={<AuthWrapper><RecipePage/></AuthWrapper>}/>*/}
+                    {/*<Route path="/Create" element={<AuthWrapper><AddRecipe/></AuthWrapper>}/>*/}
+                    {/*<Route path="/Matchipe" element={<AuthWrapper><MatchPage/></AuthWrapper>}/>*/}
 
-                    <Route path="/login" element={<ReverseAuthWrapper><Login/></ReverseAuthWrapper>}/>
-                    <Route path="/register" element={<Register/>}/>
+                    <Route path="/" element={<Homepage/>}/>
+                    <Route path="/Recipes" element={<Recipes/>}/>
+                    <Route path="/Recipes/:id" element={<RecipePage/>}/>
+                    <Route path="/Create" element={<AddRecipe/>}/>
+                    <Route path="/Matchipe" element={<MatchPage/>}/>
+
+                    {/*<Route path="/login" element={<ReverseAuthWrapper><Login/></ReverseAuthWrapper>}/>*/}
+                    {/*<Route path="/register" element={<Register/>}/>*/}
                 </Routes>
             </BrowserRouter>
-        </AuthProvider>
+        // </AuthProvider>
     )
 }
 

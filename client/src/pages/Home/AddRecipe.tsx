@@ -1,4 +1,4 @@
-import { useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/faTrash";
 import {motion} from "framer-motion";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -14,8 +14,9 @@ import {
     validateIngredients,
     validateInstructions,
 } from "../../validation/addRecipeValidation.js";
-import {createRecipe, uploadImage} from "../../services/recipeService.js";
-import type {ingredient} from "../../types/ingredient";
+import {createRecipe, uploadImage} from "../../services/api.js";
+import type {Ingredient, Step} from "../../types";
+import AddBasicInfo from "../../Components/AddRecipe/AddBasicInfo";
 
 const AddRecipe = () => {
 
@@ -28,11 +29,11 @@ const AddRecipe = () => {
     const picRef = useRef<HTMLInputElement>(null);
     const picNameRef = useRef<HTMLInputElement>(null);
     const thumbnailRef = useRef<HTMLImageElement>(null);
-    const [ingredients, setIngredients] = useState<ingredient[]>([]);
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [ingredientCount, setIngredientCount] = useState<number>(0);
-    const [steps, setSteps] = useState<string[]>([]);
+    const [steps, setSteps] = useState<Step[]>([]);
     const [stepCount, setStepCount] = useState<number>(0);
-    const {user} = useAuth();
+    // const {user} = useAuth();
     const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
     const [isPrepTimeValid, setIsPrepTimeValid] = useState<boolean>(true);
     const [isCookTimeValid, setIsCookTimeValid] = useState<boolean>(true);
@@ -62,16 +63,23 @@ const AddRecipe = () => {
     }
 
     const uploadPic = async () => {
-        const picFormData = new FormData();
-        let picPath;
+        const imgFormData = new FormData();
+        let imgPath;
 
         if(picture)
-            picFormData.append("picture", picture);
+            imgFormData.append("image", picture);
 
-        const picResponse = await uploadImage(picFormData);
+        console.log(imgFormData);
+        const imgResponse = await uploadImage(imgFormData);
 
-        picPath = picResponse.url;
-        return picPath;
+        imgPath = imgResponse.url;
+        return imgPath;
+    }
+
+    const enumerateSteps = () => {
+        steps.forEach((step, index) => {
+            step.stepNo = index + 1;
+        })
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -89,23 +97,25 @@ const AddRecipe = () => {
                 picPath = await uploadPic();
             }
 
+            enumerateSteps();
+
             const recipe = {
-                title: title,
-                prep_time: prepTime,
-                cook_time: cookTime,
+                name: title,
+                preptime: prepTime,
+                cooktime: cookTime,
                 description: description,
-                picture: picPath,
+                image: picPath,
                 ingredients: ingredients,
                 steps: steps,
-                uploader: user?.id,
+                // uploader: user?.id,
             }
 
             const response = await createRecipe(recipe);
             console.log(response);  //<===
 
-            const newRecipe = await response.recipe;
+            const newRecipe = await response;
             // console.log("new recipe: ", newRecipe)      //<===
-            navigate(`/recipes/${newRecipe._id}`);
+            navigate(`/recipes/${newRecipe.id}`);
         }
 
     }
@@ -120,18 +130,22 @@ const AddRecipe = () => {
         const cookTimeValidate = validateCookTime(cookTime);
         setIsCookTimeValid(cookTimeValidate);
 
-        const descriptionValidate = validateDescription(description);
+        const descriptionValidate = validateDescription(description.length);
         setIsDescriptionValid(descriptionValidate);
 
-        const ingredientsValidate = validateIngredients(ingredients);
+        const ingredientsValidate = validateIngredients(ingredients.length);
         setIsIngredientsValid(ingredientsValidate);
 
-        const instructionsValidate = validateInstructions(steps);
+        const instructionsValidate = validateInstructions(steps.length);
         setIsInstructionsValid(instructionsValidate);
 
         return titleValidate && prepTimeValidate && cookTimeValidate && descriptionValidate && ingredientsValidate && instructionsValidate
 
     }
+
+    useEffect(() => {
+        console.log(isTitleValid, isPrepTimeValid, isCookTimeValid, isDescriptionValid, isIngredientsValid, isInstructionsValid);
+    }, [isTitleValid, isPrepTimeValid, isCookTimeValid, isDescriptionValid, isIngredientsValid, isInstructionsValid]);
 
 
     return (
@@ -141,164 +155,21 @@ const AddRecipe = () => {
                 <h1><strong>Create Recipe</strong></h1>
                 <form onSubmit={handleSubmit} className="flex flex-col w-full h-[98rem] pt-5 text-xl gap-y-4">
                     {/* title, prep_time, cook_time, description, picture */}
-                    <motion.div
-                        className="flex w-full h-full bg-yellow-100 rounded-xl p-5 shadow-lg shadow-gray-900"
-                        initial={{
-                            opacity: 0,
-                            scale: 0.8,
-                            y: 100
-                        }}
-                        animate={{
-                            opacity: 1,
-                            scale: 1,
-                            y: 0
-                        }}
-                        transition={{
-                            duration: 0.3,
-                        }}
-                    >
-                        {/* title, prep_time, cook_time, description */}
-                        <div className="flex flex-col w-1/2 h-full pr-5 gap-y-2">
-                            {/* title */}
-                            <label
-                                className="relative flex flex-col items-start p-2"
-                                htmlFor="title"
-                            >
-                                <p>Title</p>
-                                <input
-                                    type="text"
-                                    id="title"
-                                    name="title"
-                                    autoComplete="on"
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    // onBlur={(e) => setIsTitleValid(validateTitle(e.target.value))}
-                                    className="w-full rounded-md bg-white p-1"
-                                />
-                                {!isTitleValid &&
-                                    <span
-                                        className="absolute text-red-600 text-sm bottom-[-1rem]">Cannot be empty<b></b></span>
-                                }
-                            </label>
-                            {/* prep_time, cook_time */}
-                            <div className="flex w-full items-start px-2">
-                                {/* prep_time */}
-                                <label
-                                    className="flex flex-col items-start"
-                                    htmlFor="prep_time"
-                                >
-                                    <p>Prep Time </p>
-                                    <div className="relative flex justify-start items-center">
-                                        <input
-                                            type="number"
-                                            id="prep_time"
-                                            name="prep_time"
-                                            autoComplete="on"
-                                            onChange={(e) => setPrepTime(parseInt(e.target.value))}
-                                            className="w-1/4 rounded-md bg-white p-1"
-                                        /> &nbsp; <span className="text-sm"><strong>mins</strong></span>
-                                        {!isPrepTimeValid &&
-                                            <span className="absolute text-red-600 text-sm bottom-[-1.4rem]">Must be more than 0</span>
-                                        }
-                                    </div>
-                                </label>
-                                {/* cook_time */}
-                                <label
-                                    className="flex flex-col items-start"
-                                    htmlFor="prep_time"
-                                >
-                                    <p>Cook Time</p>
-                                    <div className="relative flex justify-start items-center">
-                                        <input
-                                            type="number"
-                                            id="cook_time"
-                                            name="cook_time"
-                                            autoComplete="on"
-                                            onChange={(e) => setCookTime(parseInt(e.target.value))}
-                                            // onBlur={(e) => setIsCookTimeValid(validateCookTime(e.target.value))}
-                                            className="w-1/4 rounded-md bg-white p-1"
-                                        /> &nbsp; <span className="text-sm"><strong>mins</strong></span>
-                                        {!isCookTimeValid &&
-                                            <span className="absolute text-red-600 text-sm bottom-[-1.4rem]">Must be more than 0</span>
-                                        }
-                                    </div>
-                                </label>
-
-                            </div>
-                            {/* description */}
-                            <label
-                                className="relative flex flex-col items-start p-2 h-full"
-                                htmlFor="description"
-                            >
-                                <p>Description</p>
-                                <textarea
-                                    id="description"
-                                    name="description"
-                                    autoComplete="on"
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    // onBlur={(e) => setIsDescriptionValid(validateDescription(e.target.value))}
-                                    className="w-full h-48 rounded-md bg-white p-1 resize-none"
-                                />
-                                {!isDescriptionValid &&
-                                    <span className="absolute text-red-600 text-sm bottom-[-1rem]">Cannot be empty<b></b></span>
-                                }
-
-                            </label>
-                        </div>
-
-                        {/* picture */}
-                        <div className="flex flex-col items-center w-1/2 h-full pl-5">
-                            <label
-                                className="flex flex-col w-full h-full items-start"
-                                htmlFor="image"
-                            >
-                                <p>Image</p>
-                                <div
-                                    className="relative flex justify-center w-full max-w-full h-11/12 max-h-full bg-black overflow-hidden mb-5">
-                                    <img
-                                        className="object-cover"
-                                        src="../../../public/assets/placeholderPic.png"
-                                        ref={thumbnailRef}
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="flex w-full h-1/12 justify-start items-center gap-2">
-                                    <button
-                                        type="button"
-                                        className="border bg-blue-400 w-3/12 text-white text-sm h-full p-1 rounded-md"
-                                        onClick={() => picRef.current?.click()}
-                                    >
-                                        Upload
-                                    </button>
-                                    <input
-                                        type="file"
-                                        id="pic"
-                                        accept="image/*"
-                                        ref={picRef}
-                                        onChange={handleFileChange}
-                                        className="hidden"
-                                    />
-                                    <input
-                                        type="text"
-                                        id="picture"
-                                        ref={picNameRef}
-                                        name="picture"
-                                        className="w-7/12 h-full rounded-md bg-white p-1 cursor-not-allowed"
-                                        readOnly
-                                    />
-                                    <button
-                                        type="button"
-                                        className="relative flex justify-center items-center border bg-red-400 w-3/12 text-white h-full rounded-md"
-                                        onClick={handleFileRemove}
-                                    >
-                                        <FontAwesomeIcon
-                                            className="fa-xs"
-                                            icon={faTrash}
-                                        />
-                                    </button>
-                                </div>
-                            </label>
-                        </div>
-                    </motion.div>
+                    <AddBasicInfo
+                        setTitle={setTitle}
+                        setPrepTime={setPrepTime}
+                        setCookTime={setCookTime}
+                        setDescription={setDescription}
+                        isTitleValid={isTitleValid}
+                        isPrepTimeValid={isPrepTimeValid}
+                        isCookTimeValid={isCookTimeValid}
+                        isDescriptionValid={isDescriptionValid}
+                        thumbnailRef={thumbnailRef}
+                        picNameRef={picNameRef}
+                        handleFileChange={handleFileChange}
+                        handleFileRemove={handleFileRemove}
+                        picRef={picRef}
+                    />
                     <AddIngredients
                         ingredients={ingredients}
                         setIngredients={setIngredients}
@@ -313,18 +184,16 @@ const AddRecipe = () => {
                         setStepCount={setStepCount}
                         isInstructionsValid={isInstructionsValid}
                     />
-                    <div className="relative flex justify-end w-full bg-yellow-100 rounded-xl px-10 py-2 gap-5 mb-10 shadow-lg shadow-gray-900">
+                    <div className="relative flex justify-end w-full bg-yellow-100 rounded-xl px-5 py-2 gap-5 mb-10 shadow-lg shadow-gray-900">
                         <button
                             type="button"
-                            className="w-1/6 text-black h-15 p-1 rounded-md text-lg hover:underline"
-                            // onClick={handleCreateRecipe}
+                            className="w-1/6 text-black h-10 p-1 rounded-sm text-lg hover:underline"
                         >
                             &lt; Back
                         </button>
                         <button
                             type="submit"
-                            className={`w-1/6 bg-green-400 hover:bg-green-600 text-white text-2xl h-full p-1 rounded-md cursor-pointer`}
-                            // onClick={handleCreateRecipe}
+                            className={`w-1/6 bg-green-700 hover:bg-green-600 text-white text-lg h-full p-1 rounded-sm cursor-pointer`}
                         >
                             <b>Create</b>
                         </button>

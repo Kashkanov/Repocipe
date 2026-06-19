@@ -1,4 +1,4 @@
-import Showcase from "./Showcase.tsx";
+import Showcase from "./Showcase";
 
 const Subsection = () => {
 

@@ -2,10 +2,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {motion} from "framer-motion";
 import {type FC, useState} from "react";
-import type {ingredient} from "../../types/ingredient";
+import type { Ingredient } from "../../types";
 
 type AppProps = {
-    ingredients: ingredient[];
+    ingredients: Ingredient[];
 }
 
 const Ingredients: FC<AppProps> = ({ingredients}) => {
@@ -81,7 +81,7 @@ const Ingredients: FC<AppProps> = ({ingredients}) => {
                                             htmlFor={`ingredient-${index}`}
                                             className="ml-5"
                                         >
-                                            {ingredient.quantity * servings} {ingredient.unit} {ingredient.name}
+                                            {ingredient.qty && ingredient.qty * servings} {ingredient.unit} {ingredient.name}
                                             <motion.span
                                                 initial={false}
                                                 animate={{width: isChecked ? "100%" : "0%"}}
