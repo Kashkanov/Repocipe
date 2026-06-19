@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { Ingredient } from './entities/ingredients.entity';
 import { Step } from './entities/steps.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Module({
   imports: [
@@ -13,6 +15,12 @@ import { Step } from './entities/steps.entity';
     TypeOrmModule.forFeature([Step]),
   ],
   controllers: [RecipesController],
-  providers: [RecipesService],
+  providers: [
+    RecipesService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class RecipesModule {}

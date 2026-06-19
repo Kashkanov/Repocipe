@@ -2,13 +2,13 @@ import {useEffect, useState} from "react";
 import {motion} from "motion/react";
 import {Link} from "react-router-dom";
 import {getThreeLatestRecipes, getLatestRecipe} from "../../services/api.js";
-import type {Recipe} from "../../types";
+import type {RecipeView} from "../../types";
 
 const Showcase = () => {
 
 
-    const [sampRecipes, setSampRecipes] = useState<Recipe[]>([]);
-    const [newestRecipe, setNewestRecipe] = useState<Recipe>();
+    const [sampRecipes, setSampRecipes] = useState<RecipeView[]>([]);
+    const [newestRecipe, setNewestRecipe] = useState<RecipeView>();
 
     async function ThreeLatestRecipes() {
         const response = await getThreeLatestRecipes();
@@ -46,7 +46,7 @@ const Showcase = () => {
                                 duration: 0.5,
                             }}
                         >
-                            <Link to={`/Recipes/${newestRecipe?._id}`}>
+                            <Link to={`/Recipes/${newestRecipe?.id}`}>
                                 <motion.div
                                     className="relative w-full max-w-full h-full bg-gray-700 rounded-xl shadow-lg overflow-hidden cursor-pointer"
                                     initial={{scale: 1}}
@@ -110,10 +110,10 @@ const Showcase = () => {
                                     sampRecipes.map((recipe) => {
                                         return (
                                             <div
-                                                key={recipe._id}
+                                                key={recipe.id}
                                                 className="w-1/2 h-1/2 p-3"
                                             >
-                                                <Link to={`/Recipes/${recipe._id}`}>
+                                                <Link to={`/Recipes/${recipe.id}`}>
                                                     <motion.div
                                                         className="relative w-full h-full bg-gray-700 rounded-xl shadow-lg overflow-hidden cursor-pointer"
                                                         initial={{scale: 1}}

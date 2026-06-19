@@ -5,18 +5,20 @@ import Overview from "../../Components/RecipePage/Overview.js";
 import Ingredients from "../../Components/RecipePage/Ingredients.js";
 import Steps from "../../Components/RecipePage/Steps.js";
 import {getRecipeById} from "../../services/api.js";
-import type {Recipe} from "../../types";
+import type {RecipeView} from "../../types";
 
 const RecipePage = () => {
 
-    const [recipe, setRecipe] = useState<Recipe>();
+    const [recipe, setRecipe] = useState<RecipeView>();
     const params = useParams();
     const [showFullPic, setShowFullPic] = useState<boolean>(false);
 
     async function getRecipe() {
         const id = params.id?.toString() || undefined;
-        const response = await getRecipeById(id);
-        setRecipe(response);
+        if(id && id !== "undefined") {
+            const response = await getRecipeById(parseInt(id));
+            setRecipe(response);
+        }
     }
 
     useEffect(() => {
@@ -38,7 +40,7 @@ const RecipePage = () => {
                                 prep_time={recipe.preptime}
                                 cook_time={recipe.cooktime}
                                 description={recipe.description}
-                                uploader={recipe.uploader}
+                                // uploader={recipe.uploader}
                             />
                             {/*Pic section*/}
                             <motion.div

@@ -11,7 +11,6 @@ export interface Step {
 }
 
 export interface Recipe {
-    id?: number;
     name: string;
     preptime: number;
     cooktime: number;
@@ -21,6 +20,11 @@ export interface Recipe {
     steps: Step[];
     datetime_added?: Date;
     uploader?: string;
+}
+
+export interface RecipeView extends Recipe {
+    id: number;
+    // uploader: string;
 }
 
 export interface RecipeResponse {

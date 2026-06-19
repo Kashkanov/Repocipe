@@ -48,13 +48,26 @@ export class RecipesService {
   }
 
   async findLatest(): Promise<Recipe> {
-    const latest = await this.recipesRepository.findOne({
-      order: { id: 'DESC' },
+    const latest = await this.recipesRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 1,
     });
     if (!latest) {
       throw new NotFoundException('Recipe not found');
     }
-    return latest;
+    return latest[0];
+  }
+
+  async findThreeLatest(): Promise<Recipe[]> {
+    const threeLatest = await this.recipesRepository.find({
+      order: { createdAt: 'DESC' },
+      skip: 1,
+      take: 3,
+    });
+    if (!threeLatest) {
+      throw new NotFoundException('Recipe not found');
+    }
+    return threeLatest;
   }
 
   async create(dto: CreateRecipeDto): Promise<Recipe> {

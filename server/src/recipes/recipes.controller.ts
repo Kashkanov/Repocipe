@@ -15,11 +15,13 @@ import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Public } from '../common/decorators/public.decorator';
 
 @Controller('recipes')
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
+  @Public()
   @Get()
   findAll(
     @Query('page') page: number,
@@ -29,8 +31,23 @@ export class RecipesController {
     return this.recipesService.findAll(page, limit, search);
   }
 
+  @Public()
+  @Get('latest')
+  findLatest() {
+    console.log('FINDING LATEST 1');
+    return this.recipesService.findLatest();
+  }
+
+  @Public()
+  @Get('threeLatest')
+  findThreeLatest() {
+    return this.recipesService.findThreeLatest();
+  }
+
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: number) {
+    console.log(`FINDING RECIPE # ${id}`);
     return this.recipesService.findOne(id);
   }
 

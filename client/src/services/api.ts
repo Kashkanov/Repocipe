@@ -1,4 +1,4 @@
-import type {Ingredient, Recipe, RecipeMatch, RecipeResponse} from "../types";
+import type {Ingredient, Recipe, RecipeMatch, RecipeResponse, RecipeView} from "../types";
 
 const api_url = import.meta.env.VITE_API_URL;
 
@@ -12,7 +12,7 @@ export async function getAllRecipesAndCount(page: number, search: string): Promi
         .then((res) => res.json());
 }
 
-export async function getThreeLatestRecipes(): Promise<Recipe[]> {
+export async function getThreeLatestRecipes(): Promise<RecipeView[]> {
     return fetch(api_url + "recipes/threeLatest/",
         {
             method: "GET",
@@ -21,7 +21,7 @@ export async function getThreeLatestRecipes(): Promise<Recipe[]> {
         .then((res) => res.json());
 }
 
-export async function getLatestRecipe(): Promise<Recipe> {
+export async function getLatestRecipe(): Promise<RecipeView> {
     return fetch(api_url + "recipes/latest/",
         {
             method: "GET",
@@ -30,7 +30,7 @@ export async function getLatestRecipe(): Promise<Recipe> {
         .then((res) => res.json());
 }
 
-export async function getRecipeById(id: number): Promise<Recipe> {
+export async function getRecipeById(id: number): Promise<RecipeView> {
     return fetch(api_url + "recipes/" + id,
         {
             method: "GET",

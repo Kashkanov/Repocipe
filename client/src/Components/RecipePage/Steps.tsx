@@ -1,8 +1,9 @@
 import {motion} from "framer-motion";
 import type {FC} from "react";
+import type {Step} from "../../types";
 
 type AppProps = {
-    steps: string[];
+    steps: Step[];
 };
 
 const Steps: FC<AppProps> = ({steps}) => {
@@ -13,11 +14,10 @@ const Steps: FC<AppProps> = ({steps}) => {
             {steps &&
                 (
                     <div className="flex flex-col w-full gap-y-10">
-                        <ol className="list-decimal list-inside">
                             {steps.map((step, index) => {
                                 return (
-                                    <motion.li key={index}
-                                               className="relative text-lg items-center list-item py-5 px-2"
+                                    <motion.div key={index}
+                                               className="relative text-lg items-center py-5 px-2"
                                                initial={{scale: 1}}
                                                whileHover={{
                                                    scale: 1.1,
@@ -26,11 +26,10 @@ const Steps: FC<AppProps> = ({steps}) => {
                                                }}
                                                transition={{duration: 0.3}}
                                     >
-                                        {step}
-                                    </motion.li>
+                                        {step.stepNo}. {step.description}
+                                    </motion.div>
                                 )
                             })}
-                        </ol>
                     </div>
                 )
             }
