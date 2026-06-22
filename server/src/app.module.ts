@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     RecipesModule,
     UsersModule,
     TypeOrmModule.forRoot({
@@ -18,7 +19,6 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
       logging: ['error', 'warn', 'schema'],
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
   ],
   controllers: [AppController],

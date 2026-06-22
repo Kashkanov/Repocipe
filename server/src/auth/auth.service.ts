@@ -1,6 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/users.entity';
+import { RegisterDto } from './dto/register.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -9,17 +12,49 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(
-    username: string,
-    pass: string,
-  ): Promise<{ access_token: string }> {
+  async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
-    if (!user || user?.password !== pass) {
+    if (!user) {
+      return null;
+    }
+    const isMatch = await bcrypt.compare(pass, user.password);
+    if (user && isMatch) {
+      const { password, ...result } = user;
+      console.log(result);
+      return result;
+    }
+    return null;
+  }
+
+  async authenticate(
+    username: string,
+    password: string,
+  ): Promise<{ access_token: string }> {
+    const user = await this.validateUser(username, password);
+    if (!user) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, username: user.username };
+    return this.signIn(username, password);
+  }
+
+  async signIn(
+    userId: string,
+    username: string,
+  ): Promise<{ access_token: string }> {
+    console.log(`userId: ${userId}, username: ${username}`);
+
+    const payload = { sub: userId, username };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async create(dto: RegisterDto): Promise<User> {
+    console.log(dto);
+    return this.usersService.create(dto);
+  }
+
+  async logout(): Promise<void> {
+    await this.jwtService.signAsync({});
   }
 }

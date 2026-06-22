@@ -6,7 +6,7 @@ import { Recipe } from './entities/recipe.entity';
 import { Ingredient } from './entities/ingredients.entity';
 import { Step } from './entities/steps.entity';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Module({
   imports: [
