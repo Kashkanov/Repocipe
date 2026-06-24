@@ -7,7 +7,7 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '..', 'public'));
-  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5174';
 
   app.enableCors({
     origin: [clientUrl],
@@ -21,6 +21,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3005);
 }
 bootstrap();

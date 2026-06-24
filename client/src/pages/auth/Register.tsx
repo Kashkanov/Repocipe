@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {register} from "../../services/api";
 
 const Register = () => {
+
+    const usernameErrRef = useRef<HTMLSpanElement>(null);
+    const passwordErrRef = useRef<HTMLSpanElement>(null);
+    const confirmPasswordErrRef = useRef<HTMLSpanElement>(null);
 
     type Slide = {
         id: number,
@@ -37,33 +42,55 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    // const api_url = "http://localhost:5050/";
-    const api_url = "http://localhost:8001/";
-    const register = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const validate = (form: HTMLFormElement): boolean => {
 
+        if (!form.username.value) {
+            if (usernameErrRef.current) {
+                usernameErrRef.current.textContent = "Username is required";
+            }
+            return false;
+        }
+
+        if (!form.password.value) {
+            if (passwordErrRef.current) {
+                passwordErrRef.current.textContent = "Password is required";
+            }
+            return false;
+        }
+
+        if (!form.confPassword.value) {
+            if (confirmPasswordErrRef.current) {
+                confirmPasswordErrRef.current.textContent = "Confirm password";
+            }
+            return false;
+        }
+
+        if(form.password.value !== form.confPassword.value){
+            if (passwordErrRef.current) {
+                passwordErrRef.current.textContent = "Passwords are not a match";
+            }
+            return false;
+        }
+
+        return true;
+}
+
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         const form = e.currentTarget;
         const username = form.username.value;
-        const email = form.email.value;
-        const firstname = "";
-        const lastname = "";
         const password = form.password.value;
-        const data = {username, password, email, firstname, lastname};
 
-        fetch(api_url + "api/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .catch((err) => {
-                console.log(err);
-            });
-
-        navigate("/")
-
+        if (validate(form)) {
+            try{
+                const response = await register(username, password);
+                navigate("/login");
+            } catch (error) {
+                console.error("Register error:", error);
+            }
+        }
     }
+
 
     /*Animate to next event*/
     const handleNext = () => {
@@ -103,16 +130,16 @@ const Register = () => {
 
     return (
         <div className="relative flex flex-col justify-center items-center w-screen h-dvh overflow-x-hidden bg-[#a3b18a]">
-            <div className="flex w-4/6 h-5/6 bg-[#588157] rounded-xl overflow-hidden">
+            <div className="flex w-4/6 h-2/3 bg-[#588157] rounded-xl overflow-hidden mt-12">
                 <div className="w-1/2 h-full">
                     <div className="flex justify-start p-5 mt-2">
                         <h2 className="text-4xl"><strong>Become a member!</strong></h2>
                     </div>
                     <form
-                        onSubmit={register}
+                        onSubmit={handleRegister}
                         className="flex flex-col items-center w-full h-full pb-5"
                     >
-                        <label className="flex flex-col justify-center items-start w-4/6 gap-y-2 mb-5">
+                        <label className="flex flex-col justify-center items-start w-4/6 mb-1">
                             <span>Username</span>
                             <input
                                 type="text"
@@ -120,17 +147,18 @@ const Register = () => {
                                 name="username"
                                 className="w-full bg-white p-1 rounded-md text-black"
                             />
+                            <span ref={usernameErrRef} className="h-3 text-red-400 text-sm italic"></span>
                         </label>
-                        <label className="flex flex-col justify-center items-start w-4/6 gap-y-2 mb-5">
-                            <span>Email</span>
-                            <input
-                                type="text"
-                                id="email"
-                                name="email"
-                                className="w-full bg-white p-1 rounded-md text-black"
-                            />
-                        </label>
-                        <label className="flex flex-col justify-center items-start w-4/6 gap-y-2 mb-5">
+                        {/*<label className="flex flex-col justify-center items-start w-4/6 gap-y-2 mb-5">*/}
+                        {/*    <span>Email</span>*/}
+                        {/*    <input*/}
+                        {/*        type="text"*/}
+                        {/*        id="email"*/}
+                        {/*        name="email"*/}
+                        {/*        className="w-full bg-white p-1 rounded-md text-black"*/}
+                        {/*    />*/}
+                        {/*</label>*/}
+                        <label className="flex flex-col justify-center items-start w-4/6 mb-1">
                             <span>Password</span>
                             <input
                                 type="password"
@@ -138,14 +166,17 @@ const Register = () => {
                                 name="password"
                                 className="w-full bg-white p-1 rounded-md text-black"
                             />
+                            <span ref={passwordErrRef} className="h-3 text-red-400 text-sm italic"></span>
                         </label>
-                        <label className="flex flex-col justify-center items-start w-4/6 gap-y-2 mb-10">
+                        <label className="flex flex-col justify-center items-start w-4/6">
                             <span>Confirm Password</span>
                             <input
                                 type="password"
                                 id="confPassword"
+                                name="confPassword"
                                 className="w-full bg-white p-1 rounded-md text-black"
                             />
+                            <span ref={confirmPasswordErrRef} className="h-3 text-red-400 text-sm italic"></span>
                         </label>
                         <hr className="w-11/12 text-[#3a5a40] border mb-10"/>
                         <button

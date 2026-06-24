@@ -1,26 +1,28 @@
-import {useAuth} from "../../Contexts/AuthContext";
+import {useAuth} from "../../contexts/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import {login} from "../../services/api";
 
 const Login = () => {
 
-    const {login} = useAuth();
+    const {loginToken} = useAuth();
     const navigate = useNavigate();
     const [isCredentialsValid, setIsCredentialsValid] = useState(true);
 
-    const handleLogin = async (e : React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const form  = e.currentTarget;
+        const form = e.currentTarget;
         const username = form.username.value;
         const password = form.password.value;
-        const response = await login(username, password);
-        console.log(response);     //<===
-        if (response) {
+        try {
+            const response = await login(username, password);
             setIsCredentialsValid(true);
+            loginToken(response["access_token"]);
             navigate("/");
-        } else
+        } catch {
             setIsCredentialsValid(false);
+        }
     }
 
     return (
@@ -62,7 +64,8 @@ const Login = () => {
                                 />
                             </label>
                             <div className="flex flex-col justify-center h-1/4 items-center gap-y-2">
-                                <span className="text-red-600 h-10">{!isCredentialsValid && "Invalid Credentials"}</span>
+                                <span
+                                    className="text-red-600 h-10">{!isCredentialsValid && "Invalid Credentials"}</span>
                                 <button
                                     type="submit"
                                     className="w-25 text-white h-10 rounded-md text-lg bg-[#588157] hover:underline mb-2"

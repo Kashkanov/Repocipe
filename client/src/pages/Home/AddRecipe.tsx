@@ -1,11 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import {faTrash} from "@fortawesome/free-solid-svg-icons/faTrash";
-import {motion} from "framer-motion";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import AddIngredients from "../../Components/AddRecipe/AddIngredients.js";
 import AddSteps from "../../Components/AddRecipe/AddSteps.js";
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../../Contexts/AuthContext.js";
 import {
     validateTitle,
     validatePrepTime,

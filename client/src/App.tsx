@@ -8,34 +8,30 @@ import AddRecipe from "./pages/Home/AddRecipe.js";
 import MatchPage from "./pages/Matchipe/MatchPage.js";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import {AuthProvider} from "./Contexts/AuthContext.js";
-import AuthWrapper from "./Wrappers/AuthWrapper.js";
-import ReverseAuthWrapper from "./Wrappers/ReverseAuthWrapper.js";
+import {AuthProvider} from "./contexts/AuthContext.js";
+import AuthWrapper from "./wrappers/AuthWrapper.js";
 
 function App() {
 
     return (
-        // <AuthProvider>
+        <AuthProvider>
             <BrowserRouter>
                 <NavBar/>
                 <Routes>
-                    {/*<Route path="/" element={<AuthWrapper><Homepage/></AuthWrapper>}/>*/}
-                    {/*<Route path="/Recipes" element={<AuthWrapper><Recipes/></AuthWrapper>}/>*/}
-                    {/*<Route path="/Recipes/:id" element={<AuthWrapper><RecipePage/></AuthWrapper>}/>*/}
-                    {/*<Route path="/Create" element={<AuthWrapper><AddRecipe/></AuthWrapper>}/>*/}
-                    {/*<Route path="/Matchipe" element={<AuthWrapper><MatchPage/></AuthWrapper>}/>*/}
-
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/register" element={<Register/>}/>
                     <Route path="/" element={<Homepage/>}/>
                     <Route path="/Recipes" element={<Recipes/>}/>
                     <Route path="/Recipes/:id" element={<RecipePage/>}/>
-                    <Route path="/Create" element={<AddRecipe/>}/>
+                    <Route path="/Create" element={
+                        <AuthWrapper>
+                            <AddRecipe/>
+                        </AuthWrapper>
+                    }/>
                     <Route path="/Matchipe" element={<MatchPage/>}/>
-
-                    {/*<Route path="/login" element={<ReverseAuthWrapper><Login/></ReverseAuthWrapper>}/>*/}
-                    {/*<Route path="/register" element={<Register/>}/>*/}
                 </Routes>
             </BrowserRouter>
-        // </AuthProvider>
+        </AuthProvider>
     )
 }
 
