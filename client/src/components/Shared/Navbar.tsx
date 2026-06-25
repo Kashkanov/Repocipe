@@ -1,9 +1,10 @@
 import {NavLink, useLocation} from "react-router";
 import {useAuth} from "../../contexts/AuthContext";
 import {logout} from "../../services/api";
+import {useEffect} from "react";
 
 const Navbar = () => {
-    const {isAuthenticated, logoutToken} = useAuth();
+    const {isAuthenticated, logoutToken, user} = useAuth();
 
     const isActive = (path: string) => {
         if (path === '/') {
@@ -27,24 +28,40 @@ const Navbar = () => {
         {
             id: 0,
             name: "Home",
-            link: "/"
+            link: "/",
+            access: ["PUBLIC"]
         },
         {
             id: 1,
             name: "Explore",
-            link: "/Recipes"
+            link: "/Recipes",
+            access: ["PUBLIC"]
         },
         {
             id: 2,
             name: "Create",
-            link: "/Create"
+            link: "/Create",
+            access: ["USER", "ADMIN"]
         },
         {
             id: 3,
             name: "Matchipe",
-            link: "/Matchipe"
+            link: "/Matchipe",
+            access: ["PUBLIC"]
+        },
+        {
+            id: 4,
+            name: "Admin",
+            link: "/Admin",
+            access: ["ADMIN"]
         }
     ];
+
+    const isAuthorized = (access: string[]) => {
+        if (access.includes("PUBLIC")) return true
+        return access.includes(user?.role || "");
+    }
+
 
     return (
         <>
@@ -54,6 +71,7 @@ const Navbar = () => {
                         {
                             links.map((item) => {
                                 return (
+                                    isAuthorized(item.access) && (
                                     <li key={item.id}>
                                         <NavLink
                                             to={item.link}
@@ -66,21 +84,37 @@ const Navbar = () => {
                                             }
                                         </NavLink>
                                     </li>
+                                    )
                                 )
                             })
                         }
                     </ul>
 
                 </div>
-                <div className="flex justify-end w-1/2">
-                    {isAuthenticated &&
+                <div className="flex justify-end gap-5 w-1/2">
+                    {isAuthenticated ? (
                         <button
                             onClick={handleLogout}
                             className="font-bold"
                         >
                             Logout
                         </button>
-                    }
+                    ) : (
+                        <>
+                            <NavLink
+                                className="font-bold"
+                                to="/login"
+                            >
+                                Login
+                            </NavLink>
+                            <NavLink
+                                className="font-bold"
+                                to="/register"
+                            >
+                                Register
+                            </NavLink>
+                        </>
+                    )}
                 </div>
             </nav>
         </>

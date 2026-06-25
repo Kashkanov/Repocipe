@@ -3,7 +3,8 @@ import { CreateStepDto } from './create-step.dto';
 import {
   ArrayMinSize,
   IsArray,
-  IsNumber, IsOptional,
+  IsNumber,
+  IsOptional,
   IsString,
   Max,
   MaxLength,

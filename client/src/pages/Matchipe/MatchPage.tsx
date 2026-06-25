@@ -1,8 +1,8 @@
 import {useState} from "react";
-import AddIngredients from "../../Components/Matchipe/AddIngredients.js";
+import AddIngredients from "../../components/Matchipe/AddIngredients.js";
 import {matchRecipe} from "../../services/api.js";
-import MatchResults from "../../Components/Matchipe/MatchResults.js";
-import Loading from "../../Components/Shared/Loading.js";
+import MatchResults from "../../components/Matchipe/MatchResults.js";
+import Loading from "../../components/Shared/Loading.js";
 import {validateIngredients} from "../../validation/addRecipeValidation.js";
 import type {RecipeMatch} from "../../types";
 

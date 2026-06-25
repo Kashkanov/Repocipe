@@ -18,7 +18,7 @@ const Login = () => {
         try {
             const response = await login(username, password);
             setIsCredentialsValid(true);
-            loginToken(response["access_token"]);
+            loginToken(response.data["access_token"]);
             navigate("/");
         } catch {
             setIsCredentialsValid(false);

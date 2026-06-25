@@ -11,18 +11,26 @@ const Showcase = () => {
     const [newestRecipe, setNewestRecipe] = useState<RecipeView>();
 
     async function ThreeLatestRecipes() {
-        const response = await getThreeLatestRecipes();
-        setSampRecipes(response);
+        try {
+            const response = await getThreeLatestRecipes();
+            setSampRecipes(response.data);
+        }catch (e) {
+            console.error(e);
+        }
     }
 
     async function LatestRecipe() {
-        const response = await getLatestRecipe();
-        setNewestRecipe(response);
+        try {
+            const response = await getLatestRecipe();
+            setNewestRecipe(response.data);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     useEffect(() => {
-        ThreeLatestRecipes();
-        LatestRecipe();
+        void ThreeLatestRecipes();
+        void LatestRecipe();
     }, []);
 
 
@@ -40,7 +48,7 @@ const Showcase = () => {
                             }}
                             animate={{
                                 opacity: 1,
-                                x:0
+                                x: 0
                             }}
                             transition={{
                                 duration: 0.5,
@@ -99,7 +107,7 @@ const Showcase = () => {
                                 }}
                                 animate={{
                                     opacity: 1,
-                                    y:0
+                                    y: 0
                                 }}
                                 transition={{
                                     duration: 0.5,

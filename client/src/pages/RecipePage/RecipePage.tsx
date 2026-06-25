@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {motion} from "framer-motion";
-import Overview from "../../Components/RecipePage/Overview.js";
-import Ingredients from "../../Components/RecipePage/Ingredients.js";
-import Steps from "../../Components/RecipePage/Steps.js";
+import Overview from "../../components/RecipePage/Overview.js";
+import Ingredients from "../../components/RecipePage/Ingredients.js";
+import Steps from "../../components/RecipePage/Steps.js";
 import {getRecipeById} from "../../services/api.js";
 import type {RecipeView} from "../../types";
 
@@ -16,8 +16,12 @@ const RecipePage = () => {
     async function getRecipe() {
         const id = params.id?.toString() || undefined;
         if(id && id !== "undefined") {
-            const response = await getRecipeById(parseInt(id));
-            setRecipe(response);
+            try {
+                const response = await getRecipeById(parseInt(id));
+                setRecipe(response.data);
+            }catch (e) {
+                console.error("Error fetching recipe:", e);
+            }
         }
     }
 

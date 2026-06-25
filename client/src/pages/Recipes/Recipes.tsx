@@ -1,11 +1,11 @@
-import RecipeTable from "../../Components/Recipes/RecipeTable.js";
+import RecipeTable from "../../components/Recipes/RecipeTable.js";
 import {useEffect, useState} from "react";
 import {useSearchParams} from "react-router";
-import Pagination from "../../Components/Recipes/Pagination.js";
+import Pagination from "../../components/Recipes/Pagination.js";
 import {getAllRecipesAndCount} from "../../services/api.js";
 import type {Recipe} from "../../types";
-import Filters from "../../Components/Recipes/Filters";
-import Search from "../../Components/Recipes/Search";
+import Filters from "../../components/Recipes/Filters";
+import Search from "../../components/Recipes/Search";
 import {motion} from "framer-motion";
 
 const Recipes = () => {
@@ -21,9 +21,13 @@ const Recipes = () => {
 
         // setSearchParams({search: localSearch, page: page.toString()});
 
-        const response = await getAllRecipesAndCount(page, localSearch);
-        setRecipes(response.recipes);
-        setTotal(response.total);
+        try {
+            const response = await getAllRecipesAndCount(page, localSearch);
+            setRecipes(response.data.recipes);
+            setTotal(response.data.total);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     function handlePageChange(newPage: number) {

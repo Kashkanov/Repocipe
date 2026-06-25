@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
-import AddIngredients from "../../Components/AddRecipe/AddIngredients.js";
-import AddSteps from "../../Components/AddRecipe/AddSteps.js";
+import AddIngredients from "../../components/AddRecipe/AddIngredients.js";
+import AddSteps from "../../components/AddRecipe/AddSteps.js";
 import {useNavigate} from "react-router-dom";
 import {
     validateTitle,
@@ -12,7 +12,7 @@ import {
 } from "../../validation/addRecipeValidation.js";
 import {createRecipe, uploadImage} from "../../services/api.js";
 import type {Ingredient, Step} from "../../types";
-import AddBasicInfo from "../../Components/AddRecipe/AddBasicInfo";
+import AddBasicInfo from "../../components/AddRecipe/AddBasicInfo";
 
 const AddRecipe = () => {
 
@@ -68,7 +68,7 @@ const AddRecipe = () => {
         console.log(imgFormData);
         const imgResponse = await uploadImage(imgFormData);
 
-        imgPath = imgResponse.url;
+        imgPath = imgResponse.data.url;
         return imgPath;
     }
 
@@ -106,12 +106,16 @@ const AddRecipe = () => {
                 // uploader: user?.id,
             }
 
-            const response = await createRecipe(recipe);
-            console.log(response);  //<===
+            try {
+                const response = await createRecipe(recipe);
+                console.log(response);  //<===
 
-            const newRecipe = await response;
-            // console.log("new recipe: ", newRecipe)      //<===
-            navigate(`/recipes/${newRecipe.id}`);
+                const newRecipe = response.data;
+                // console.log("new recipe: ", newRecipe)      //<===
+                navigate(`/recipes/${newRecipe.id}`);
+            } catch (error) {
+                console.error(error);
+            }
         }
 
     }

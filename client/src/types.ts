@@ -39,6 +39,8 @@ export interface RecipeMatch {
 }
 
 export interface User {
-    id: string;
+    sub: string;
     name: string;
+    role: string;
+    exp: number;
 }

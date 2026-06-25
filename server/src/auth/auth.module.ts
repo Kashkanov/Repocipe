@@ -7,7 +7,7 @@ import * as process from 'node:process';
 import { LocalStrategy } from './strategies/local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { PassportAuthController } from './passport-auth.controller';
-import {JwtStrategy} from "./strategies/jwt.strategy";
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import {JwtStrategy} from "./strategies/jwt.strategy";
       global: true,
       useFactory: () => ({
         secret: process.env.JWT_SECRET,
-        signOptions: { expiresIn: '5m' },
+        signOptions: { expiresIn: '5h' },
       }),
     }),
   ],

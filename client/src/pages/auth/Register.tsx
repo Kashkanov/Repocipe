@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {register} from "../../services/api";
 
@@ -65,7 +65,7 @@ const Register = () => {
             return false;
         }
 
-        if(form.password.value !== form.confPassword.value){
+        if (form.password.value !== form.confPassword.value) {
             if (passwordErrRef.current) {
                 passwordErrRef.current.textContent = "Passwords are not a match";
             }
@@ -73,20 +73,34 @@ const Register = () => {
         }
 
         return true;
-}
+    }
+
+    const clearValErrors = () => {
+        if(usernameErrRef.current && passwordErrRef.current && confirmPasswordErrRef.current){
+            usernameErrRef.current.textContent = "";
+            passwordErrRef.current.textContent = "";
+            confirmPasswordErrRef.current.textContent = "";
+        }
+    }
 
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        clearValErrors();
         const form = e.currentTarget;
         const username = form.username.value;
         const password = form.password.value;
-
         if (validate(form)) {
-            try{
+            try {
                 const response = await register(username, password);
                 navigate("/login");
             } catch (error) {
-                console.error("Register error:", error);
+                if (error.response) {
+                    if (error.response.status === 409) {
+                        if (usernameErrRef.current) {
+                            usernameErrRef.current.textContent = "Username already exists";
+                        }
+                    }
+                }
             }
         }
     }
@@ -129,7 +143,8 @@ const Register = () => {
     }, [slideshowIndex]);
 
     return (
-        <div className="relative flex flex-col justify-center items-center w-screen h-dvh overflow-x-hidden bg-[#a3b18a]">
+        <div
+            className="relative flex flex-col justify-center items-center w-screen h-dvh overflow-x-hidden bg-[#a3b18a]">
             <div className="flex w-4/6 h-2/3 bg-[#588157] rounded-xl overflow-hidden mt-12">
                 <div className="w-1/2 h-full">
                     <div className="flex justify-start p-5 mt-2">
@@ -149,15 +164,6 @@ const Register = () => {
                             />
                             <span ref={usernameErrRef} className="h-3 text-red-400 text-sm italic"></span>
                         </label>
-                        {/*<label className="flex flex-col justify-center items-start w-4/6 gap-y-2 mb-5">*/}
-                        {/*    <span>Email</span>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        id="email"*/}
-                        {/*        name="email"*/}
-                        {/*        className="w-full bg-white p-1 rounded-md text-black"*/}
-                        {/*    />*/}
-                        {/*</label>*/}
                         <label className="flex flex-col justify-center items-start w-4/6 mb-1">
                             <span>Password</span>
                             <input
@@ -178,7 +184,7 @@ const Register = () => {
                             />
                             <span ref={confirmPasswordErrRef} className="h-3 text-red-400 text-sm italic"></span>
                         </label>
-                        <hr className="w-11/12 text-[#3a5a40] border mb-10"/>
+                        <hr className="w-11/12 text-[#3a5a40] border m-10"/>
                         <button
                             type="submit"
                             className="w-4/6 h-10 bg-[#344e41] text-white rounded-md"

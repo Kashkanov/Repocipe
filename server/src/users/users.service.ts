@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { User } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -20,11 +20,15 @@ export class UsersService {
     return user;
   }
 
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
   async create(dto: CreateUserDto): Promise<User> {
     console.log(dto);
     const user = await this.findOne(dto.username);
     if (user) {
-      throw new Error('User already exists');
+      throw new ConflictException('User already exists');
     }
     const saltRounds = 10;
     const password = await bcrypt.hash(dto.password, saltRounds);

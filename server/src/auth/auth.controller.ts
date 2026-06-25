@@ -18,16 +18,16 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
-  async signIn(@Body() signInDto: SignInDto) {
-    console.log(signInDto);
-    return this.authService.authenticate(
-      signInDto.username,
-      signInDto.password,
-    );
-  }
+  // @Public()
+  // @HttpCode(HttpStatus.OK)
+  // @Post('login')
+  // async signIn(@Body() signInDto: SignInDto) {
+  //   console.log(signInDto);
+  //   return this.authService.authenticate(
+  //     signInDto.username,
+  //     signInDto.password,
+  //   );
+  // }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')

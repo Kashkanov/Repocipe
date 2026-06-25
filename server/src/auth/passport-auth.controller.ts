@@ -14,11 +14,13 @@ import { PassportLocalGuard } from './guards/passport-local.guard';
 import { Public } from '../common/decorators/public.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
+import { Role } from '../common/enums/role.enum';
 
 interface AuthenticatedRequest extends ExpressRequest {
   user?: {
     userId: string;
     username: string;
+    role: Role;
   };
 }
 
@@ -34,7 +36,11 @@ export class PassportAuthController {
     if (!req.user) {
       return null;
     }
-    return this.authService.signIn(req.user.userId, req.user.username);
+    return this.authService.signIn(
+      req.user.userId,
+      req.user.username,
+      req.user.role,
+    );
   }
 
   @Public()
