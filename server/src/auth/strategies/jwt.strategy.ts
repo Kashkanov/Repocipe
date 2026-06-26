@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Role } from '../../common/enums/role.enum';
+import type { Request } from 'express';
 
 interface JwtPayload {
   sub: string;
@@ -15,11 +16,15 @@ interface ValidateResult {
   role: Role;
 }
 
+const cookieExtractor = (req: Request): string | null => {
+  return req?.cookies?.token as string | null;
+};
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: cookieExtractor,
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET || 'fallback-secret-key',
     });

@@ -4,11 +4,13 @@ import axios from "axios";
 const api_url = import.meta.env.VITE_API_URL;
 
 const publicApi = axios.create({
-    baseURL: api_url
+    baseURL: api_url,
+    withCredentials: true
 })
 
 const privateApi = axios.create({
-    baseURL: api_url
+    baseURL: api_url,
+    withCredentials: true
 })
 
 // ------------------ AUTH ------------------
@@ -30,6 +32,8 @@ export const register = async (username: string, password: string) => publicApi.
     username,
     password
 })
+
+export const getUser = async () => privateApi.get("/auth-v2/me");
 
 export const logout = async () => privateApi.post("/auth-v2/logout");
 

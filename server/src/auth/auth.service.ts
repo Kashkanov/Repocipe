@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/users.entity';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
-import {Role} from "../common/enums/role.enum";
+import { Role } from '../common/enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +44,6 @@ export class AuthService {
     username: string,
     role: Role,
   ): Promise<{ access_token: string }> {
-
     const payload = { sub: userId, username, role };
     return {
       access_token: await this.jwtService.signAsync(payload),

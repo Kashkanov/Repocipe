@@ -1,6 +1,6 @@
 import {useAuth} from "../contexts/AuthContext";
 import {Navigate} from "react-router-dom";
-import type {FC} from "react";
+import {type FC, useEffect} from "react";
 import LoadingPage from "../components/Shared/LoadingPage";
 
 type AppProps = {
@@ -9,17 +9,18 @@ type AppProps = {
 }
 
 const AuthWrapper: FC<AppProps> = ({children, access}) => {
-    const { isAuthenticated, user } = useAuth();
+    const { user, loading, checkAuth } = useAuth();
     const isAuthorized = access.includes(user?.role || "")
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" />;
-    }
-    if (!isAuthorized) {
-        return <Navigate to="/" />;
-    }
+    useEffect(() => {
+        void checkAuth();
+    }, []);
 
-    return children;
+    if (loading) return <LoadingPage />;
+    if (user){
+        return isAuthorized ? children : <Navigate to="/" />;
+    }
+    return <Navigate to="/login" />;
 
 }
 

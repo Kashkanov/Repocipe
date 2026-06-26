@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Post,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { Request as ExpressRequest } from 'express';
@@ -15,6 +16,7 @@ import { Public } from '../common/decorators/public.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
 import { Role } from '../common/enums/role.enum';
+import type { Response } from 'express';
 
 interface AuthenticatedRequest extends ExpressRequest {
   user?: {
@@ -32,15 +34,27 @@ export class PassportAuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @UseGuards(PassportLocalGuard)
-  login(@Request() req: AuthenticatedRequest) {
+  async login(
+    @Request() req: AuthenticatedRequest,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     if (!req.user) {
       return null;
     }
-    return this.authService.signIn(
+    const { access_token } = await this.authService.signIn(
       req.user.userId,
       req.user.username,
       req.user.role,
     );
+
+    res.cookie('token', access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 1000 * 60, // 1 minute
+    });
+
+    return { message: 'Login successful' };
   }
 
   @Public()
@@ -63,7 +77,9 @@ export class PassportAuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  async logout() {
-    return this.authService.logout();
+  async logout(@Res({ passthrough: true }) res: Response) {
+    await this.authService.logout();
+    res.clearCookie('token');
+    return { message: 'Logout successful' };
   }
 }

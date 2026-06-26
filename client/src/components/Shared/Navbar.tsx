@@ -4,7 +4,7 @@ import {logout} from "../../services/api";
 import {useEffect} from "react";
 
 const Navbar = () => {
-    const {isAuthenticated, logoutToken, user} = useAuth();
+    const {user} = useAuth();
 
     const isActive = (path: string) => {
         if (path === '/') {
@@ -18,7 +18,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             await logout()
-            logoutToken();
+            window.location.reload();
         } catch (error) {
             console.error("Logout error:", error);
         }
@@ -94,7 +94,7 @@ const Navbar = () => {
 
                 </div>
                 <div className="flex justify-end gap-5 w-1/2">
-                    {isAuthenticated ? (
+                    {user ? (
                         <button
                             onClick={handleLogout}
                             className="font-bold"

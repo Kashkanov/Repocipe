@@ -5,7 +5,7 @@ import {login} from "../../services/api";
 
 const Login = () => {
 
-    const {loginToken} = useAuth();
+    const {checkAuth} = useAuth();
     const navigate = useNavigate();
     const [isCredentialsValid, setIsCredentialsValid] = useState(true);
 
@@ -18,7 +18,8 @@ const Login = () => {
         try {
             const response = await login(username, password);
             setIsCredentialsValid(true);
-            loginToken(response.data["access_token"]);
+            // loginToken(response.data["access_token"]);
+            await checkAuth();
             navigate("/");
         } catch {
             setIsCredentialsValid(false);
