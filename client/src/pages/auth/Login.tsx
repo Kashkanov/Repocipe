@@ -16,9 +16,8 @@ const Login = () => {
         const username = form.username.value;
         const password = form.password.value;
         try {
-            const response = await login(username, password);
+            await login(username, password);
             setIsCredentialsValid(true);
-            // loginToken(response.data["access_token"]);
             await checkAuth();
             navigate("/");
         } catch {

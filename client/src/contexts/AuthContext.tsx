@@ -1,12 +1,8 @@
-import {createContext, type FC, useContext, useEffect, useMemo, useState} from "react";
+import {createContext, type FC, useContext, useEffect, useState} from "react";
 import type {User} from "../types"
 import {getUser} from "../services/api";
 
 type AuthContextType = {
-    // token: string | null;
-    // loginToken: (token: string) => void;
-    // logoutToken: () => void;
-    // isAuthenticated: boolean;
     user: User | undefined;
     checkAuth: () => Promise<void>;
     loading: boolean;

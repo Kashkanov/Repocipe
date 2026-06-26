@@ -1,4 +1,4 @@
-import type {Ingredient, Recipe, RecipeMatch, RecipeResponse, RecipeView} from "../types";
+import type {Ingredient, Recipe} from "../types";
 import axios from "axios";
 
 const api_url = import.meta.env.VITE_API_URL;

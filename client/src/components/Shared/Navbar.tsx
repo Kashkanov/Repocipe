@@ -1,7 +1,6 @@
-import {NavLink, useLocation} from "react-router";
+import {NavLink, useLocation} from "react-router-dom";
 import {useAuth} from "../../contexts/AuthContext";
 import {logout} from "../../services/api";
-import {useEffect} from "react";
 
 const Navbar = () => {
     const {user} = useAuth();
