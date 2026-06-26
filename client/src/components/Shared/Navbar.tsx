@@ -59,6 +59,8 @@ const Navbar = () => {
 
     const isAuthorized = (access: string[]) => {
         if (access.includes("PUBLIC")) return true
+        console.log(user)
+        if (!user) return false;
         return access.includes(user?.role || "");
     }
 
