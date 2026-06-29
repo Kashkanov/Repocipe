@@ -1,8 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './users.entity';
-import { Roles } from '../common/decorators/roles.decorator';
-import { Role } from '../common/enums/role.enum';
 
 @Controller('users')
 export class UsersController {
@@ -14,9 +11,9 @@ export class UsersController {
   //   return this.usersService.findOne(username);
   // }
 
-  @Get()
-  @Roles(Role.ADMIN)
-  findAll(): Promise<User[]> {
-    return this.usersService.findAll();
-  }
+  // @Get()
+  // @Roles(Role.ADMIN)
+  // findAll() {
+  //   return this.usersService.findAll();
+  // }
 }

@@ -43,11 +43,13 @@ export class RecipesService {
   }
 
   async findLatest() {
-    return this.db
+    const latest = await this.db
       .select()
       .from(schema.recipes)
       .orderBy(desc(schema.recipes.createdAt))
       .limit(1);
+
+    return latest[0];
   }
 
   async findThreeLatest() {

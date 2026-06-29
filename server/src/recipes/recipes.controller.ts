@@ -34,7 +34,6 @@ export class RecipesController {
   @Public()
   @Get('latest')
   findLatest() {
-    console.log('FINDING LATEST 1');
     return this.recipesService.findLatest();
   }
 

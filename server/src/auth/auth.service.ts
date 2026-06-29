@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/users.entity';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { Role } from '../common/enums/role.enum';
@@ -27,18 +26,6 @@ export class AuthService {
     return null;
   }
 
-  // async authenticate(
-  //   username: string,
-  //   password: string,
-  //   role: Role,
-  // ): Promise<{ access_token: string }> {
-  //   const user = await this.validateUser(username, password);
-  //   if (!user) {
-  //     throw new UnauthorizedException();
-  //   }
-  //   return this.signIn(username, password);
-  // }
-
   async signIn(
     userId: string,
     username: string,
@@ -50,7 +37,7 @@ export class AuthService {
     };
   }
 
-  async create(dto: RegisterDto): Promise<User> {
+  async create(dto: RegisterDto) {
     console.log(dto);
     return this.usersService.create(dto);
   }

@@ -1,5 +1,5 @@
 {
-  "id": "11c724e6-71b1-41a0-a29d-8a8beadc5d94",
+  "id": "20c9c2c2-fbe1-4268-946a-3da548e8c461",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,8 +14,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "recipe_id": {
-          "name": "recipe_id",
+        "recipeId": {
+          "name": "recipeId",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -47,12 +47,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "ingredients_recipe_id_recipes_id_fk": {
-          "name": "ingredients_recipe_id_recipes_id_fk",
+        "ingredients_recipeId_recipes_id_fk": {
+          "name": "ingredients_recipeId_recipes_id_fk",
           "tableFrom": "ingredients",
           "tableTo": "recipes",
           "columnsFrom": [
-            "recipe_id"
+            "recipeId"
           ],
           "columnsTo": [
             "id"
@@ -128,8 +128,14 @@
           "primaryKey": true,
           "notNull": true
         },
-        "recipe_id": {
-          "name": "recipe_id",
+        "stepNo": {
+          "name": "stepNo",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipeId": {
+          "name": "recipeId",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -143,12 +149,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "steps_recipe_id_recipes_id_fk": {
-          "name": "steps_recipe_id_recipes_id_fk",
+        "steps_recipeId_recipes_id_fk": {
+          "name": "steps_recipeId_recipes_id_fk",
           "tableFrom": "steps",
           "tableTo": "recipes",
           "columnsFrom": [
-            "recipe_id"
+            "recipeId"
           ],
           "columnsTo": [
             "id"
@@ -162,9 +168,71 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'USER'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.role": {
+      "name": "role",
+      "schema": "public",
+      "values": [
+        "USER",
+        "ADMIN"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

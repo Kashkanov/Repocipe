@@ -22,7 +22,7 @@ export const recipes = pgTable('recipes', {
 
 export const ingredients = pgTable('ingredients', {
   id: serial('id').primaryKey(),
-  recipeId: integer('recipe_id')
+  recipeId: integer('recipeId')
     .notNull()
     .references(() => recipes.id),
   qty: integer('qty'),
@@ -33,7 +33,8 @@ export const ingredients = pgTable('ingredients', {
 
 export const steps = pgTable('steps', {
   id: serial('id').primaryKey(),
-  recipeId: integer('recipe_id')
+  stepNo: integer('stepNo').notNull(),
+  recipeId: integer('recipeId')
     .notNull()
     .references(() => recipes.id),
   description: text('description').notNull(),
