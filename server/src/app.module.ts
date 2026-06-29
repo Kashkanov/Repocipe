@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './common/guards/roles.guard';
+import { DbModule } from './db/db.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RolesGuard } from './common/guards/roles.guard';
       logging: ['error', 'warn', 'schema'],
     }),
     AuthModule,
+    DbModule,
   ],
   controllers: [AppController],
   providers: [

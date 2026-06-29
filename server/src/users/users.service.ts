@@ -1,30 +1,22 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { User } from './users.entity';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { DRIZZLE } from '../db/db.module';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as schema from '../db/schema';
+import { eq } from 'drizzle-orm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
-  ) {}
+  constructor(@Inject(DRIZZLE) private db: NodePgDatabase<typeof schema>) {}
 
-  async findOne(username: string): Promise<User | undefined> {
-    const user = await this.usersRepository.findOne({ where: { username } });
-    if (!user) {
-      return undefined;
-    }
-    return user;
+  async findOne(username: string) {
+    return this.db.query.users.findFirst({
+      where: eq(schema.users.username, username),
+    });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
-  }
-
-  async create(dto: CreateUserDto): Promise<User> {
+  async create(dto: CreateUserDto) {
     console.log(dto);
     const user = await this.findOne(dto.username);
     if (user) {
@@ -32,10 +24,9 @@ export class UsersService {
     }
     const saltRounds = 10;
     const password = await bcrypt.hash(dto.password, saltRounds);
-    const newUser = this.usersRepository.create({
+    return this.db.insert(schema.users).values({
       username: dto.username,
       password,
     });
-    return this.usersRepository.save(newUser);
   }
 }

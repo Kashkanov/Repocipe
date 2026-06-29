@@ -1,6 +1,6 @@
 import RecipeTable from "../../components/Recipes/RecipeTable.js";
 import {useEffect, useState} from "react";
-import {useSearchParams} from "react-router";
+import {useSearchParams} from "react-router-dom";
 import Pagination from "../../components/Recipes/Pagination.js";
 import {getAllRecipesAndCount} from "../../services/api.js";
 import type {Recipe} from "../../types";
